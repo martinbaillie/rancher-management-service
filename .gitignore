@@ -1,0 +1,10 @@
+pkg
+bin
+dist
+vendor/pkg
+**/swagger/bindata_assetfs.go
+**/swagger-ui
+*.zip
+*.xml
+*.cid
+prometheus.yml

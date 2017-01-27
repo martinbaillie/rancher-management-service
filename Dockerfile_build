@@ -1,0 +1,23 @@
+FROM golang
+MAINTAINER Martin Baillie <martin.t.baillie@gmail.com>
+WORKDIR /go/src/rancher-management-service
+
+# Ugh
+ENV TZ 'Australia/Sydney'
+ENV HTTP_PROXY $http_proxy
+ENV HTTPS_PROXY $http_proxy
+ENV http_proxy $http_proxy
+ENV https_proxy $http_proxy
+
+# Get updated certs for our Docker scratch image later
+RUN DEBIAN_FRONTEND=noninteractive \
+        && echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99force-ipv4 \
+        && echo '-k' > $HOME/.curlrc \
+        && echo "${TZ}" > /etc/timezone \
+        && dpkg-reconfigure -f noninteractive tzdata >/dev/null \
+        && apt-get update -yq \
+        && apt-get install -yq unzip \
+        && apt-get upgrade -yq --no-install-recommends ca-certificates \
+        && update-ca-certificates -f
+
+ENTRYPOINT make GOOS=linux

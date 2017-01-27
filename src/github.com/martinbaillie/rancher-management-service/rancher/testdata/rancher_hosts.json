@@ -1,0 +1,44 @@
+[
+  {
+    "agent_ip": "10.138.100.10",
+    "hostId": 152,
+    "hostname": "host-1.corp",
+    "labels": {
+      "environment": "dev",
+      "instance_size": "small",
+      "io.rancher.host.docker_version": "1.10",
+      "io.rancher.host.linux_kernel_version": "3.10",
+      "log_host": "true"
+    },
+    "name": "host-1.corp",
+    "uuid": "259466fc-2c68-4701-8fe5-0ca5be5d354f"
+  },
+  {
+    "agent_ip": "10.138.100.5",
+    "hostId": 153,
+    "hostname": "host-2.corp",
+    "labels": {
+      "environment": "dev",
+      "instance_size": "large24",
+      "io.rancher.host.docker_version": "1.10",
+      "io.rancher.host.linux_kernel_version": "3.10"
+    },
+    "name": "host-2.corp",
+    "uuid": "bfa1363f-8f2a-44de-afb6-a1bb7db1d614"
+  },
+  {
+    "agent_ip": "10.138.103.11",
+    "hostId": 154,
+    "hostname": "host-4.corp",
+    "labels": {
+      "entry_2": "true",
+      "entry_host": "true",
+      "environment": "dev",
+      "instance_size": "large24",
+      "io.rancher.host.docker_version": "1.10",
+      "io.rancher.host.linux_kernel_version": "3.10"
+    },
+    "name": "host-4.corp",
+    "uuid": "e966be1e-6543-4310-9a4a-5016f86b0eb1"
+  }
+]
