@@ -23,7 +23,7 @@
 //
 // There are no TOS at this moment, use at your own risk.
 //
-//     Version: latest-27fd2f2
+//     Version: MAKEFILE_REPLACED_VERSION
 //     License: BSD-3-Clause https://opensource.org/licenses/BSD-3-Clause
 //     Contact: Martin Baillie <martin.t.baillie@gmail.com>
 //
