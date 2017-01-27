@@ -5,7 +5,7 @@
 // that can be found in the LICENSE file or at:
 // https://opensource.org/licenses/BSD-3-Clause
 
-// Rancher Management Service
+// Package swagger Rancher Management Service
 //
 // The purpose of this project is to provide a boilerplate starter for a
 // microservice which will sit within the Rancher environment performing
@@ -23,7 +23,7 @@
 //
 // There are no TOS at this moment, use at your own risk.
 //
-//     Version: MAKEFILE_REPLACED_VERSION
+//     Version: latest-27fd2f2
 //     License: BSD-3-Clause https://opensource.org/licenses/BSD-3-Clause
 //     Contact: Martin Baillie <martin.t.baillie@gmail.com>
 //
