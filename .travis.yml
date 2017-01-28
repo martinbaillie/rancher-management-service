@@ -1,5 +1,8 @@
 language: go
 install: true
 all_branches: true
+env:
+  global:
+    - TMPDIR=$TRAVIS_BUILD_DIR/tmp
 notifications:
   email: true
