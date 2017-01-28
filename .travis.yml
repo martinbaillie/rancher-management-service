@@ -1,0 +1,5 @@
+language: go
+install: true
+all_branches: true
+notifications:
+  email: true
