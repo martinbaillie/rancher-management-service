@@ -1,7 +1,5 @@
 language: go
-install:
-  - make swagger-ui
-  - make
+install: true
 all_branches: true
 notifications:
   email: true

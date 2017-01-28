@@ -32,7 +32,7 @@ DOCKERREG?=
 .PHONY: dep clean vet lint fmt bench build update docker-clean docker-tag \
 	docker-push fetch-swagger-ui layout-swagger-ui swagger-ui
 
-all: dep clean test build
+all: dep clean swagger-ui test build
 
 dep:
 	@echo ">> dependencies"
@@ -115,7 +115,7 @@ docker-build-prepare: docker-clean
 		--build-arg=no_proxy=${no_proxy} \
 		-t $(DOCKERREG)$(DOCKERIMG)-build -f Dockerfile_build .
 
-docker-build: swagger-ui docker-build-prepare
+docker-build: docker-build-prepare
 	@echo ">> building (docker)"
 	@test -f $@.cid && { docker rm -f $$(cat $@.cid) && rm $@.cid; } || true;
 	@docker run -t --cidfile="$@.cid" \
