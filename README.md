@@ -3,7 +3,6 @@
 
 [![Golang Programming Language](https://img.shields.io/badge/language-Golang-blue.svg)](https://www.golang.org)
 [![Build Status](https://travis-ci.org/martinbaillie/rancher-management-service.svg?branch=master)](https://travis-ci.org/martinbaillie/rancher-management-service)
-[![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/martinbaillie/rancher-management-service)
 
 ## Purpose
 
