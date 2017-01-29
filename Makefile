@@ -1,3 +1,5 @@
+SHELL=/bin/bash
+
 BUILDTIME=$(shell date '+%Y-%m-%dT%T%z')
 BUILDHASH=$(shell git rev-parse --verify --short HEAD || echo "")
 BUILDUSER=$(shell [ -n "${bamboo_ManualBuildTriggerReason_userName}" ] && \
@@ -22,8 +24,8 @@ GOOS?=linux darwin
 GOARCH?=amd64
 
 # Swagger
-SWAGGER_UI_VERSION = "2.2.8"
-SWAGGER_UI_URL = "https://github.com/swagger-api/swagger-ui/archive/v$(SWAGGER_UI_VERSION).zip"
+SWAGGER_UI_VERSION=2.2.8
+SWAGGER_UI_URL=https://github.com/swagger-api/swagger-ui/archive/v$(SWAGGER_UI_VERSION).zip
 
 # Docker
 DOCKERIMG?=martinbaillie/rancher-management-service
