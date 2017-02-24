@@ -15,8 +15,9 @@ import (
 	"github.com/go-kit/kit/tracing/opentracing"
 	kithttp "github.com/go-kit/kit/transport/http"
 
+	"context"
+
 	stdopentracing "github.com/opentracing/opentracing-go"
-	"golang.org/x/net/context"
 )
 
 // Error type used for asserting errors in responses

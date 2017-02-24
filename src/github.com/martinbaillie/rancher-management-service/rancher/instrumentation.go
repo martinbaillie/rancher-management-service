@@ -10,8 +10,9 @@ package rancher
 import (
 	"time"
 
+	"context"
+
 	"github.com/go-kit/kit/metrics"
-	"golang.org/x/net/context"
 )
 
 // NewServerServiceInstrumenter returns an instance of an instrumenting ServerService.

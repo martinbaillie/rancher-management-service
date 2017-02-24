@@ -13,9 +13,10 @@ import (
 	"strings"
 	"time"
 
+	"context"
+
 	"github.com/go-kit/kit/log"
 	level "github.com/go-kit/kit/log/experimental_level"
-	"golang.org/x/net/context"
 )
 
 // NewServerServiceLogger returns a new instance of a ServerService logging wrapper.

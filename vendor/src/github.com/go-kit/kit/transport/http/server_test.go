@@ -1,14 +1,14 @@
 package http_test
 
 import (
+	"context"
 	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
-
-	"golang.org/x/net/context"
+	"time"
 
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
@@ -93,8 +93,15 @@ func TestServerHappyPath(t *testing.T) {
 	}
 }
 
-func TestServerFinalizer(t *testing.T) {
-	c := make(chan int)
+
+func TestMultipleServerBefore(t *testing.T) {
+	var (
+		headerKey    = "X-Henlo-Lizer"
+		headerVal    = "Helllo you stinky lizard"
+		statusCode   = http.StatusTeapot
+		responseBody = "go eat a fly ugly\n"
+		done         = make(chan struct{})
+	)
 	handler := httptransport.NewServer(
 		context.Background(),
 		endpoint.Nop,
@@ -102,11 +109,23 @@ func TestServerFinalizer(t *testing.T) {
 			return struct{}{}, nil
 		},
 		func(_ context.Context, w http.ResponseWriter, _ interface{}) error {
-			w.WriteHeader(<-c)
+			w.Header().Set(headerKey, headerVal)
+			w.WriteHeader(statusCode)
+			w.Write([]byte(responseBody))
 			return nil
 		},
-		httptransport.ServerFinalizer(func(_ context.Context, code int, _ *http.Request) {
-			c <- code
+		httptransport.ServerBefore(func(ctx context.Context, r *http.Request) context.Context {
+			ctx = context.WithValue(ctx, "one", 1)
+
+			return ctx
+		}),
+		httptransport.ServerBefore(func(ctx context.Context, r *http.Request) context.Context {
+			if _, ok := ctx.Value("one").(int); !ok {
+				t.Error("Value was not set properly when multiple ServerBefores are used")
+			}
+
+			close(done)
+			return ctx
 		}),
 	)
 
@@ -114,12 +133,106 @@ func TestServerFinalizer(t *testing.T) {
 	defer server.Close()
 	go http.Get(server.URL)
 
-	want := http.StatusTeapot
-	c <- want   // give status code to response encoder
-	have := <-c // take status code from finalizer
+	select {
+	case <-done:
+	case <-time.After(time.Second):
+		t.Fatal("timeout waiting for finalizer")
+	}
+}
 
-	if want != have {
-		t.Errorf("want %d, have %d", want, have)
+func TestMultipleServerAfter(t *testing.T) {
+	var (
+		headerKey    = "X-Henlo-Lizer"
+		headerVal    = "Helllo you stinky lizard"
+		statusCode   = http.StatusTeapot
+		responseBody = "go eat a fly ugly\n"
+		done         = make(chan struct{})
+	)
+	handler := httptransport.NewServer(
+		context.Background(),
+		endpoint.Nop,
+		func(context.Context, *http.Request) (interface{}, error) {
+			return struct{}{}, nil
+		},
+		func(_ context.Context, w http.ResponseWriter, _ interface{}) error {
+			w.Header().Set(headerKey, headerVal)
+			w.WriteHeader(statusCode)
+			w.Write([]byte(responseBody))
+			return nil
+		},
+		httptransport.ServerAfter(func(ctx context.Context, w http.ResponseWriter) context.Context {
+			ctx = context.WithValue(ctx, "one", 1)
+
+			return ctx
+		}),
+		httptransport.ServerAfter(func(ctx context.Context, w http.ResponseWriter) context.Context {
+			if _, ok := ctx.Value("one").(int); !ok {
+				t.Error("Value was not set properly when multiple ServerAfters are used")
+			}
+
+			close(done)
+			return ctx
+		}),
+	)
+
+	server := httptest.NewServer(handler)
+	defer server.Close()
+	go http.Get(server.URL)
+
+	select {
+	case <-done:
+	case <-time.After(time.Second):
+		t.Fatal("timeout waiting for finalizer")
+	}
+}
+
+func TestServerFinalizer(t *testing.T) {
+	var (
+		headerKey    = "X-Henlo-Lizer"
+		headerVal    = "Helllo you stinky lizard"
+		statusCode   = http.StatusTeapot
+		responseBody = "go eat a fly ugly\n"
+		done         = make(chan struct{})
+	)
+	handler := httptransport.NewServer(
+		context.Background(),
+		endpoint.Nop,
+		func(context.Context, *http.Request) (interface{}, error) {
+			return struct{}{}, nil
+		},
+		func(_ context.Context, w http.ResponseWriter, _ interface{}) error {
+			w.Header().Set(headerKey, headerVal)
+			w.WriteHeader(statusCode)
+			w.Write([]byte(responseBody))
+			return nil
+		},
+		httptransport.ServerFinalizer(func(ctx context.Context, code int, _ *http.Request) {
+			if want, have := statusCode, code; want != have {
+				t.Errorf("StatusCode: want %d, have %d", want, have)
+			}
+
+			responseHeader := ctx.Value(httptransport.ContextKeyResponseHeaders).(http.Header)
+			if want, have := headerVal, responseHeader.Get(headerKey); want != have {
+				t.Errorf("%s: want %q, have %q", headerKey, want, have)
+			}
+
+			responseSize := ctx.Value(httptransport.ContextKeyResponseSize).(int64)
+			if want, have := int64(len(responseBody)), responseSize; want != have {
+				t.Errorf("response size: want %d, have %d", want, have)
+			}
+
+			close(done)
+		}),
+	)
+
+	server := httptest.NewServer(handler)
+	defer server.Close()
+	go http.Get(server.URL)
+
+	select {
+	case <-done:
+	case <-time.After(time.Second):
+		t.Fatal("timeout waiting for finalizer")
 	}
 }
 

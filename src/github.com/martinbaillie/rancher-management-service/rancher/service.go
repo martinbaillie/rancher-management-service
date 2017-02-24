@@ -7,7 +7,7 @@
 
 package rancher
 
-import "golang.org/x/net/context"
+import "context"
 
 // The Rancher package's servicing functionality is split into Server services
 // and Client services, where:

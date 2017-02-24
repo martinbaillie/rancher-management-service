@@ -14,7 +14,7 @@ import (
 
 	stdopentracing "github.com/opentracing/opentracing-go"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"gopkg.in/jarcoal/httpmock.v1"
 

@@ -8,6 +8,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/pprof"
@@ -19,8 +20,6 @@ import (
 	"time"
 
 	stdlog "log"
-
-	"golang.org/x/net/context"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -86,9 +85,9 @@ func main() {
 
 		if *debug {
 			// Show debug level log statements
-			logger = level.New(logger, level.Config{Allowed: level.AllowDebugAndAbove()})
+			logger = level.New(logger, level.Allowed(level.AllowDebugAndAbove()))
 		} else {
-			logger = level.New(logger, level.Config{Allowed: level.AllowInfoAndAbove()})
+			logger = level.New(logger, level.Allowed(level.AllowInfoAndAbove()))
 		}
 
 		// Redirect stdlib logger to Go kit logger.
